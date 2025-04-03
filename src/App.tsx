@@ -5,17 +5,16 @@ import { TokenCreate } from "./components/TokenCreate";
 import { TokenMint } from "./components/TokenMint";
 import { TokenSend } from "./components/TokenSend";
 import { TransactionHistory } from "./components/TransactionHistory";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, Menu, X } from "lucide-react";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <div
       className={`min-h-screen p-6 transition-all duration-500 ${
-        darkMode
-          ? "bg-gray-900 text-white"
-          : "bg-gray-100 text-gray-900"
+        darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"
       }`}
       style={{
         backgroundImage: darkMode
@@ -27,72 +26,71 @@ function App() {
       }}
     >
       <div className="max-w-4xl mx-auto">
+        {/* Header - Centered Logo and Title */}
         <div className="flex items-center justify-center mb-4">
           {!darkMode && (
-            <img src="https://giffiles.alphacoders.com/136/13693.gif" alt="" className="h-20 w-20 rounded-full p-2" />
+            <img
+              src="https://giffiles.alphacoders.com/136/13693.gif"
+              alt=""
+              className="h-20 w-20 rounded-full p-2"
+            />
           )}
           <h1 className="text-4xl font-extrabold text-yellow-300 ml-3">SolSage</h1>
         </div>
-        <p className="text-center text-yellow-200 mt-2 text-lg font-semibold">Smart and insightful token management</p>
-        
-        <nav className="moshpit p-4 mb-6 flex justify-around">
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              `text-yellow-300 text-lg hover:text-red-400 transition font-extrabold ${
-                isActive ? "text-red-400" : ""
-              }`
-            }
-            aria-label="Connect Wallet"
+
+        {/* Hamburger Menu Button - Centered on Small Screens */}
+        <div className="flex justify-center md:hidden">
+          <button
+            className="p-2 rounded-md border-2 border-gray-700 dark:border-gray-300 bg-transparent flex items-center justify-center"
+            onClick={() => setMenuOpen(!menuOpen)}
           >
-            Connect Wallet
-          </NavLink>
-          <NavLink
-            to="/create-token"
-            className={({ isActive }) =>
-              `text-yellow-300 text-lg hover:text-red-400 transition font-extrabold ${
-                isActive ? "text-red-400" : ""
-              }`
-            }
-            aria-label="Create Token"
-          >
-            Create Token
-          </NavLink>
-          <NavLink
-            to="/mint-token"
-            className={({ isActive }) =>
-              `text-yellow-300 text-lg hover:text-red-400 transition font-extrabold ${
-                isActive ? "text-red-400" : ""
-              }`
-            }
-            aria-label="Mint Token"
-          >
-            Mint Token
-          </NavLink>
-          <NavLink
-            to="/send-token"
-            className={({ isActive }) =>
-              `text-yellow-300 text-lg hover:text-red-400 transition font-extrabold ${
-                isActive ? "text-red-400" : ""
-              }`
-            }
-            aria-label="Send Token"
-          >
-            Send Token
-          </NavLink>
-          <NavLink
-            to="/history"
-            className={({ isActive }) =>
-              `text-yellow-300 text-lg hover:text-red-400 transition font-extrabold ${
-                isActive ? "text-red-400" : ""
-              }`
-            }
-            aria-label="Transaction History"
-          >
-            Transaction History
-          </NavLink>
+            {menuOpen ? (
+              <X size={32} className="text-gray-900 dark:text-white" />
+            ) : (
+              <Menu size={32} className="text-gray-900 dark:text-white font-bold" />
+            )}
+          </button>
+        </div>
+
+        {/* Tagline */}
+        <p className="text-center text-yellow-200 mt-2 text-lg font-semibold">
+          Smart and insightful token management
+        </p>
+
+        {/* Desktop Navigation - Hidden on Small Screens */}
+        <nav className="moshpit p-4 mb-6 hidden md:flex justify-around">
+          {["/", "/create-token", "/mint-token", "/send-token", "/history"].map((path, index) => (
+            <NavLink
+              key={index}
+              to={path}
+              className={({ isActive }) =>
+                `text-yellow-300 text-lg hover:text-red-400 transition font-extrabold ${
+                  isActive ? "text-red-400" : ""
+                }`
+              }
+            >
+              {["Connect Wallet", "Create Token", "Mint Token", "Send Token", "Transaction History"][index]}
+            </NavLink>
+          ))}
         </nav>
 
+        {/* Mobile Menu - Only Visible on Small Screens */}
+        {menuOpen && (
+          <div className="md:hidden bg-gray-800 p-4 rounded-lg shadow-lg text-center">
+            {["/", "/create-token", "/mint-token", "/send-token", "/history"].map((path, index) => (
+              <NavLink
+                key={index}
+                to={path}
+                className="block py-2 text-yellow-300 text-lg font-extrabold hover:text-red-400"
+                onClick={() => setMenuOpen(false)} // Close menu when link is clicked
+              >
+                {["Connect Wallet", "Create Token", "Mint Token", "Send Token", "Transaction History"][index]}
+              </NavLink>
+            ))}
+          </div>
+        )}
+
+        {/* Main Content */}
         <div className="moshpit p-6">
           <Routes>
             <Route path="/" element={<WalletConnect />} />
@@ -104,6 +102,7 @@ function App() {
           </Routes>
         </div>
 
+        {/* Theme Toggle Button */}
         <div className="flex justify-center mt-6">
           <button
             onClick={() => setDarkMode(!darkMode)}

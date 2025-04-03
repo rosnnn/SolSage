@@ -99,6 +99,11 @@ body {
   }
 }
 
+.bg-gray-800 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(31 41 55 / 11%);
+}
+
 /* At the end of styles.css */
 @keyframes bounce {
     0%, 100% { transform: translateY(0); }
